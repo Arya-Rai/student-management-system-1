@@ -15,10 +15,10 @@ let allRegData = [];
 }
 regForm.onsubmit = (e) => {
     e.preventDefault();
-    let checkEmail = allRegData.find((data) => data.Email == allInput[3].value);
+    let checkEmail = allRegData.find((data) => data.Email == allInput[2].value);
     if(checkEmail == undefined)
     {
-    allRegData.push({
+        allRegData.push({
         Name : allInput[0].value,
         Enrollment : allInput[1].value,
         Email : allInput[2].value,
@@ -44,23 +44,23 @@ const getRegData = () => {
         let dataStr = JSON.stringify(data);
         let finalData = dataStr.replace(/"/g,"'");
         regList.innerHTML += `
-        <tr>
-            <td>1</td>
-            <td>${data.Name}</td>
-            <td>${data.Enrollment}</td>
-            <td>${data.Email}</td>
-            <td>${data.Mobile}</td>
-            <td>${data.Branch}</td>
-            <td>${data.Year}</td>
-            <td>
-                <button class="btn btn-primary">
-                    <i class="fa fa-edit"></i>
-                </button>
-                <button class="btn btn-danger">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </td>
-        </tr>
+<tr>
+    <td>1</td>
+    <td>${data.Name}</td>
+    <td>${data.Enrollment}</td>
+    <td>${data.Email}</td>
+    <td>${data.Mobile}</td>
+    <td>${data.Branch}</td>
+    <td>${data.Year}</td>
+    <td>
+        <button data="${finalData}" index=${index}" class="edit-btn btn btn-primary">
+            <i class="fa fa-edit"></i>
+        </button>
+        <button index="${index}" class=" del-btn btn btn-danger">
+            <i class="fa fa-trash"></i>
+        </button>
+    </td>
+</tr>
 
 
 
@@ -72,18 +72,19 @@ const getRegData = () => {
 
 // delete coding
 const action = () =>{
-     let allDelBtn = regList.querySelectorAll(".del-btn");
-     for(let btn of  allDelBtn)
-     {
+    let allDelBtn = regList.querySelectorAll(".del-btn");
+    for(let btn of  allDelBtn)
+    {    
+
         btn.onclick = async () =>{
    
-            let isconfirm = await confirm();
+            let isconfirm =  await confirm();
             if(isconfirm)
             {
- let index =  btn.getAttribute("index");
-            allRegData.splice(index,1);
-            localStorage.setItem("allRegData",JSON.stringify(allRegData));
-            getRegData();
+                let index =  btn.getAttribute("index");
+                allRegData.splice(index,1);
+                localStorage.setItem("allRegData",JSON.stringify(allRegData));
+                getRegData();
             }
         }
    
@@ -101,7 +102,7 @@ const action = () =>{
             let data = JSON.parse(finalData);
 
             addBtn.click();
-            allInput[0].value = data.name;
+            allInput[0].value = data.Name;
             allInput[1].value = data.Enrollment;
             allInput[2].value = data.Email;
             allInput[3].value = data.Mobile;
@@ -117,20 +118,21 @@ const action = () =>{
                     Email : allInput[2].value,
                     Mobile : allInput[3].value,
                     Branch: allInput[4].value,
-                    Year : allInput[5].value,
+                    Year : allInput[5].value
 
-                }
+                };
                 localStorage.setItem("allRegData",JSON.stringify(allRegData));
                 swal("Data Updated","successfully!","success");
                 closeBtn.click();
                 regForm.reset('');
                 allBtn[1].disabled = false;
                 allBtn[0].disabled = true
-            }
-        }
-    }
+                
+            };
+        };
+    };
 
-}
+};
 getRegData();
 
 //Delete all Data
